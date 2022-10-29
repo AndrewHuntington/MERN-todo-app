@@ -2,7 +2,6 @@
 // @route GET /api/todos
 // @access Private
 const getTodos = (req, res) => {
-  console.log(req.body);
   res.status(200).json({ message: "Get todos" });
 };
 
@@ -10,6 +9,7 @@ const getTodos = (req, res) => {
 // @route POST /api/todos
 // @access Private
 const createTodo = (req, res) => {
+  console.log(req.body);
   res.status(200).json({ message: "Create todo" });
 };
 
