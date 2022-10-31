@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Todo = require("../models/todoModel.js");
+const User = require("../models/userModel.js");
 
 // @desc Register user
 // @route POST /api/users
