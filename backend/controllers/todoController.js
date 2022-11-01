@@ -5,9 +5,9 @@ const Todo = require("../models/todoModel.js");
 // @route GET /api/todos
 // @access Private
 const getTodos = asyncHandler(async (req, res) => {
-  const todos = await Todo.find();
+  const todos = await Todo.find({ user: req.user._id });
 
-  res.status(200).json({ message: "Get todos" });
+  res.status(200).json(todos);
 });
 
 // @desc Create todo
@@ -21,6 +21,7 @@ const createTodo = asyncHandler(async (req, res) => {
 
   const todo = await Todo.create({
     text: req.body.text,
+    user: req.user._id,
   });
 
   res.status(200).json(todo);
@@ -68,7 +69,7 @@ const deleteTodo = asyncHandler(async (req, res) => {
   }
 
   // Make sure the logged in user matches the todo user
-  if (todo.user.toString() !== req.user._id) {
+  if (todo.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Not authorized to delete this todo");
   }
