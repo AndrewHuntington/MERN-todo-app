@@ -37,6 +37,12 @@ const updateTodo = asyncHandler(async (req, res) => {
     throw new Error("Todo not found");
   }
 
+  // Check for user
+  if (!req.user) {
+    req.status(401);
+    throw new Error("User not found");
+  }
+
   const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
@@ -53,6 +59,18 @@ const deleteTodo = asyncHandler(async (req, res) => {
   if (!todo) {
     res.status(400);
     throw new Error("Todo not found");
+  }
+
+  // Check for user
+  if (!req.user) {
+    req.status(401);
+    throw new Error("User not found");
+  }
+
+  // Make sure the logged in user matches the todo user
+  if (todo.user.toString() !== req.user._id) {
+    res.status(401);
+    throw new Error("Not authorized to delete this todo");
   }
 
   await todo.remove();
