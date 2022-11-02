@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel.js");
 
+// TODO: Add getUsers, updateUser and deleteUser for admin to manage other users' accounts
+
 // @desc Register user
 // @route POST /api/users
 // @access Public
@@ -82,14 +84,38 @@ const getMe = asyncHandler(async (req, res) => {
 // @route PUT /api/users/me
 // @access Private
 const updateMe = asyncHandler(async (req, res) => {
-  res.json({ message: "Update my data" });
+  // Check for user
+  if (!req.user) {
+    req.status(401);
+    throw new Error("User not found");
+  }
+
+  // Guard against changing isAdmin, unless done by an admin
+  if (!req.user.isAdmin && req.body.isAdmin) {
+    res.status(401);
+    throw new Error("Only admins can make others an admin");
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
+    new: true,
+  });
+
+  res.status(200).json(updatedUser);
 });
 
 // @desc DELETE user data
 // @route DELETE /api/users/me
 // @access Private
 const deleteMe = asyncHandler(async (req, res) => {
-  res.json({ message: "Delete my data" });
+  // Check for user
+  if (!req.user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  const deletedUser = await User.findByIdAndDelete(req.user._id);
+
+  res.status(200).json({ message: `Deleted user ${deletedUser.id}` });
 });
 
 // Generate JWT
