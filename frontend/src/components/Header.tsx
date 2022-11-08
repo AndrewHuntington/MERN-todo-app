@@ -17,7 +17,7 @@ function Header() {
 
   return (
     <header className="flex justify-center w-full mb-16">
-      <div className="flex border-b border-gray-200 w-[90%] lg:max-w-4xl py-5 justify-between">
+      <div className="flex border-b border-gray-200 w-[90%] lg:max-w-4xl py-5 justify-between items-center">
         <div>
           <Link to="/">Todo App</Link>
         </div>
@@ -28,7 +28,7 @@ function Header() {
                 onClick={onLogout}
                 className=" py-[10px] px-[20px] border border-black rounded-md bg-black text-white font-bold text-center flex items-center justify-center"
               >
-                <FaSignOutAlt /> Logout
+                <FaSignOutAlt className="mr-2" /> Logout
               </button>
             </li>
           ) : (
